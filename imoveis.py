@@ -4,10 +4,13 @@ from time import sleep
 from unicodedata import normalize
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import WebDriverException   
 
 def getimov(pags=10, cidade="pelotas"):
-    driver = webdriver.Firefox()
+    firefox_capabilities = DesiredCapabilities.FIREFOX
+    firefox_capabilities['marionette'] = True
+    driver = webdriver.Firefox(capabilities=firefox_capabilities)
     url = 'http://www.zapimoveis.com.br/venda/imoveis/rs+' + cidade
     driver.get(url)
     data = [['preco', 'bairro', 'tipo', 'endereco', 'cidade', 'quartos', 'suites', 'vagas', 'area']]
