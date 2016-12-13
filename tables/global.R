@@ -27,7 +27,7 @@ for (i in 1:length(outs)) {
 outs_ind <- unique(unlist(outs_ind))
 data <- data[!outs_ind]
 
-preco_bairro <- data[tipo == "Apartamento",.(
+preco_bairro <- data[tipo == "Casa",.(
   media=mean(preco),
   minimo=min(preco),
   maximo=max(preco),
