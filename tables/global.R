@@ -26,7 +26,6 @@ for (i in 1:length(outs)) {
 }
 outs_ind <- unique(unlist(outs_ind))
 data <- data[!outs_ind]
-data <- data[, tipo == "Apartamento"]
 
 preco_bairro <- data[,.(
   media=mean(preco),
