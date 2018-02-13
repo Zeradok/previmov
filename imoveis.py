@@ -15,7 +15,7 @@ def getimov(pags=10, cidade="pelotas", todas=False):
     url = 'http://www.zapimoveis.com.br/venda/imoveis/rs+' + cidade
     driver.get(url)
     data = [['preco', 'quartos', 'suites', 'vagas', 'area', 'bairro', 'tipo',
-             'cidade']]
+             'cidade', 'url']]
     pag = 1
     while pag <= pags:
         sleep(5)
