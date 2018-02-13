@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import WebDriverException   
 
-def getimov(pags=10, cidade="pelotas"):
+def getimov(pags=10, cidade="pelotas", todas=False):
     firefox_capabilities = DesiredCapabilities.FIREFOX
     firefox_capabilities['marionette'] = True
     driver = webdriver.Firefox(capabilities=firefox_capabilities)
@@ -20,6 +20,8 @@ def getimov(pags=10, cidade="pelotas"):
         pag_url = driver.page_source
         soup = BeautifulSoup(pag_url, 'html.parser')
         page = soup.find(class_='pagination').input['value']
+        if todas == True:
+            pags = int(soup.find(class_='pull-right num-of').get_text().split()[1])
         aux = 0
         if int(page) != pag:
             aux += 1
