@@ -1,6 +1,6 @@
 # Instalar e carregar pacotes necessarios
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(data.table, ggplot2, Metrics, caret, neuralnet, nnet, kernlab)
+pacman::p_load(data.table, ggplot2, Metrics, caret, neuralnet, nnet, kernlab, xgboost)
 
 # Carregar dados e regressoes
 source("dados.R")
@@ -142,3 +142,24 @@ View(errortrain[order(erro_train, decreasing = TRUE),])
 erro_test <- abs(pred_test - testData$preco)
 errortest <- cbind(erro_test, pred_test, testData)
 View(errortest[order(erro_test, decreasing = TRUE),])
+
+
+## xgboost model
+   
+fitControl <- trainControl(method = "repeatedcv", number = 10, repeats = 10)
+
+Train <- as.matrix(dataTrain)[, c(-1, -3, -4, -6, -7, -9, -10, -12, -13)]
+xgb_grid <- expand.grid(nrounds = 100, max_depth = 4, eta = 0.05, gamma = 0, colsample_bytree = 1, min_child_weight = 3)
+set.seed(21)
+xgboost_model <- train(x = Train, y = dataTrain[, "preco"], method = "xgbTree", trControl = fitControl, tuneGrid = xgb_grid)
+
+library(mlr)
+library(Matrix)
+lrn = makeLearner("regr.xgboost", predict.type = "response", nrounds = 2000, max_depth = 10, eta = 0.01, min_child_weight = 5)
+df <- dataTrain[, c(-3, -4, -6, -7, -9, -10, -12, -13)]
+train_task = makeRegrTask(data = df, target ="preco")
+fit = train(lrn, train_task)
+imp = xgb.importance(fit$features, model = fit$learner.model)
+# make partial dependence plot for most important feature
+pd = generatePartialPredictionData(fit, train_task, imp$Feature, gridsize = 10)
+plotPartialPrediction(pd)

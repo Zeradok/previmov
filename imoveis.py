@@ -1,3 +1,5 @@
+#(setq python-shell-interpreter "python2")
+
 import re
 import csv
 from time import sleep
@@ -13,7 +15,7 @@ def getimov(pags=10, cidade="pelotas"):
     driver = webdriver.Firefox(capabilities=firefox_capabilities)
     url = 'http://www.zapimoveis.com.br/venda/imoveis/rs+' + cidade
     driver.get(url)
-    data = [['preco', 'bairro', 'tipo', 'endereco', 'cidade', 'quartos', 'suites', 'vagas', 'area']]
+    data = [['preco', 'quartos', 'suites', 'vagas', 'area', 'bairro', 'tipo', 'cidade']]
     pag = 1
     while pag <= pags:
         sleep(5)
@@ -27,39 +29,58 @@ def getimov(pags=10, cidade="pelotas"):
                 print "Error timeout: data saved until page " + str(pag-1)
                 break
             continue
-        imoveis = soup.find_all(class_='list-cell')
-        for imovel in imoveis:
+        imoveis = soup.find_all(class_='caracteristicas pull-left')
+        enderecos = soup.find_all(class_='endereco pull-right')
+        for i in range(len(imoveis)):
+            imovel = imoveis[i]
+            endereco = enderecos[i]
             data_row = []
-            price = imovel.find_all(class_='price')[0].get_text()
-            data_row.append(re.sub(r'R\$|\.', '', price).strip())
-            data_row.append(imovel.find_all(class_='bairro')[0].get_text())
-            data_row.append(imovel.find_all(class_='loc3')[0].get_text())
-            data_row.append(imovel.find_all(class_='loc2')[0].get_text())
-            data_row.append(imovel.find_all(class_='loc2')[1].get_text())
+            price = imovel.find_all(class_='preco')[0].get_text()
+            data_row.append(re.sub(r'R\$|\.', '', price).strip().split('\n')[0])
             try:
-                desc = imovel.find_all(class_='inline loc2')[0].get_text()
-                if re.match(r'^.*?(\d*)\squarto.*', desc):
-                    data_row.append(re.sub(r'(\d*)\squarto.*', r'\1', desc))
-                else:
-                    data_row.append(u'')
-                if re.match(r'^.*?(\d*)\ssu\xedte.*', desc):
-                    data_row.append(re.sub(r'^.*?(\d*)\ssu\xedte.*', r'\1', desc))
-                else:
-                    data_row.append(u'0')
-                if re.match(r'^.*?(\d*)\svaga.*', desc):
-                    data_row.append(re.sub(r'^.*?(\d*)\svaga.*', r'\1', desc))
-                else:
-                    data_row.append(u'0')
-                if re.match(r'^.*?(\d*)m2.*', desc):
-                    data_row.append(re.sub(r'^.*?(\d*)m2.*', r'\1', desc))
+                quartos = imovel.find_all(class_='icone-quartos')[0].get_text()
+                if re.match(r'^.*?(\d*)\squarto.*', quartos):
+                    data_row.append(re.sub(r'(\d*)\squarto.*', r'\1', quartos))
                 else:
                     data_row.append(u'')
             except IndexError:
                 data_row.append(u'')
+            try:
+                suites = imovel.find_all(class_='icone-suites')[0].get_text()
+                if re.match(r'^.*?(\d*)\ssu\xedte.*', suites):
+                    data_row.append(re.sub(r'^.*?(\d*)\ssu\xedte.*', r'\1', suites))
+                else:
+                    data_row.append(u'0')
+            except IndexError:
                 data_row.append(u'0')
+            try:
+                vagas = imovel.find_all(class_='icone-vagas')[0].get_text()
+                if re.match(r'^.*?(\d*)\svaga.*', vagas):
+                    data_row.append(re.sub(r'^.*?(\d*)\svaga.*', r'\1', vagas))
+                else:
+                    data_row.append(u'0')
+            except IndexError:
                 data_row.append(u'0')
+            try:
+                area = imovel.find_all(class_='icone-area')[0].get_text()
+                if re.match(r'^.*?(\d*)m2.*', area):
+                    data_row.append(re.sub(r'^.*?(\d*)m2.*', r'\1', area))
+                else:
+                    data_row.append(u'')
+            except IndexError:
+                data_row.append(u'')
+            try:
+                bairro = endereco.findAll('strong')[0].get_text().strip()
+                data_row.append(bairro)
+            except IndexError:
+                data_row.append(u'')
+            try:
+                tipo = endereco.findAll('p')[0].get_text().split()[0]
+                data_row.append(tipo)
+            except IndexError:
                 data_row.append(u'')
             row = [normalize('NFKD', x).encode('ascii', 'ignore') for x in data_row]
+            row.append(cidade)
             data.append(row)
         if pag != pags:
             btn_next = driver.find_element_by_id('proximaPagina')
