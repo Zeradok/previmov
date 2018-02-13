@@ -1,5 +1,3 @@
-#(setq python-shell-interpreter "python2")
-
 import re
 import csv
 from time import sleep
