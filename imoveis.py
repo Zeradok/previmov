@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import TimeoutException
 
 
 def getimov(pags=10, cidade="pelotas", todas=False):
@@ -107,3 +108,41 @@ def savecsv(data, dest='imoveis.csv'):
     with open(dest, 'wb') as f:
         writer = csv.writer(f, delimiter=';')
         writer.writerows(data)
+
+#Pelotas - 1815 em diante
+def details(file):
+    firefox_capabilities = DesiredCapabilities.FIREFOX
+    firefox_capabilities['marionette'] = True
+    driver = webdriver.Firefox(capabilities=firefox_capabilities)
+    with open(file, 'rb') as f:
+        reader = csv.reader(f, delimiter=';')
+        data = list(reader)
+        data[0].append('descricao')
+        data[0].append('caracteristica')
+        for i in range(1, len(data)):
+            url = data[i][8]
+            try:
+                sleep(3)
+                driver.get(url)
+            except TimeoutException as ex:
+                print "Exception has been thrown. " + str(ex)
+                driver.close()
+                return data
+            pag_url = driver.page_source
+            soup = BeautifulSoup(pag_url, 'html.parser')
+            try:
+                descricao = soup.find(id='descricaoOferta').get_text()
+                descricao = normalize('NFKD', descricao).encode('ascii', 'ignore')
+                descricao = re.sub(r'\n', r' ', descricao).strip()
+            except AttributeError:
+                descricao = ''
+            try:
+                caracter = soup.find(id='caracteristicaOferta').get_text()
+                caracter = normalize('NFKD', caracter).encode('ascii', 'ignore')
+                caracter = re.sub(r'\n', r' ', caracter).strip()
+            except AttributeError:
+                caracter = ''
+            data[i].append(descricao)
+            data[i].append(caracter)
+    driver.close()
+    return data

@@ -1,25 +1,12 @@
 ﻿# previmov
 
-*previmov* é um trabalho colaborativo coordenado pelo Professor [Regis A. Ely](http://regisely.com) e inicialmente desenvolvido pelos alunos do [Mestrado em Economia Aplicada](http://wp.ufpel.edu.br/ppgom/) e do Curso de Graduação em Economia da Universidade Federal de Pelotas (UFPel). No momento os participantes são:
-
-| Nome                     | Descrição                           |
-|--------------------------|-------------------------------------|
-| Regis A. Ely             | Professor de Economia (PPGOM/UFPel) |
-| Douglas Pivatto          | Mestrando em Economia (PPGOM/UFPel) |
-| Fabio Michel de Oliveira | Mestrando em Economia (PPGOM/UFPel) |
-| Gustavo Hoffmann Moreira | Mestrando em Economia (PPGOM/UFPel) |
-| Jean Marcel Duarte       | Mestrando em Economia (PPGOM/UFPel) |
-| Leonardo Cordeiro        | Mestrando em Economia (PPGOM/UFPel) |
-| Michel R. Meyer          | Graduando em Economia (DECON/UFPel) |
-| Patricia Colussi         | Mestranda em Economia (PPGOM/UFPel) |
-| Rafael Parfitt           | Mestrando em Economia (PPGOM/UFPel) |
-| Renan P. Peres           | Mestrando em Economia (PPGOM/UFPel) |
+*previmov* é um trabalho colaborativo coordenado pelo Professor [Regis A. Ely](http://regisely.com) e desenvolvido com a ajuda dos alunos do [Mestrado em Economia Aplicada](http://wp.ufpel.edu.br/ppgom/) e do Curso de Graduação em Economia da Universidade Federal de Pelotas (UFPel).
 
 O objetivo deste trabalho é desenvolver algoritmos para coleta, análise e previsão de preços de imóveis baseado em suas características. Inicialmente a análise será aplicada para a cidade de Pelotas-RS, podendo ser estendida para outras cidades futuramente.
 
 *previmov* é um trabalho em progresso. No momento este repositório inclui:
 
-1. Rotina em Python 2.7 para coleta de cerca de 5200 imóveis à venda na cidade de Pelotas, disponibilizados em um arquivo csv;
+1. Rotina em Python 2.7 para coleta de cerca dos imóveis à venda na cidade de Pelotas, disponibilizados em um arquivo csv;
 
 2. Script `dados.R` e `dados_novos.R` para o carregamento dos dados e filtragem dos outliers. O primeiro faz a filtragem manualmente para o arquivo `imoveis_pel.csv`, enquanto que o segundo utiliza um algoritmo de detecção de outliers e pode ser aplicado para qualquer atualização da base;
 
@@ -33,7 +20,7 @@ O objetivo deste trabalho é desenvolver algoritmos para coleta, análise e prev
 
 # Como utilizar
 
-No momento você pode acessar os aplicativos interativos criados no R com o pacote shiny (em desenvolvimento). Para isso abra a sua sessão do R e digite:
+No momento você pode acessar os aplicativos interativos criados no R com o pacote shiny (os últimos dados disponibilizados são de 13 de fevereiro de 2018). Para isso abra a sua sessão do R e digite:
 
 ```r
 install.packages("shiny") # Instale o pacote shiny caso não o tenha
@@ -63,4 +50,4 @@ Caso você queira saber mais especificamente onde contribuir você pode acessar 
 
 # Copyright
 
-No momento este projeto não se enquadra na definição de "software livre". Ele está licenciado sob [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported](https://creativecommons.org/licenses/by-nc-sa/3.0/). Esta licença permite que você copie, redistribua e adapte qualquer código encontrado aqui, porém você não pode usá-los com intuito comercial e qualquer obra derivada deve atribuir o crédito original elencando as mudanças que foram feitas, além de estar licenciada sob os mesmos termos. Isto vale também para a utilização dos dados disponibilizados neste repositório. Se você tem interesse na utilização destes dados para pesquisa científica, entre em contato com o proprietário do repositório. Note que a utilização destes dados para publicação em uma revista que não está licenciada sobre os mesmos termos implica na violação do Copyright.
+No momento este projeto não se enquadra na definição de "software livre". Ele está licenciado sob [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported](https://creativecommons.org/licenses/by-nc-sa/3.0/). Esta licença permite que você copie, redistribua e adapte qualquer código encontrado aqui, porém você não pode usá-los com intuito comercial e qualquer obra derivada deve atribuir o crédito original elencando as mudanças que foram feitas, além de estar licenciada sob os mesmos termos. Isto vale também para a utilização dos dados disponibilizados neste repositório.
